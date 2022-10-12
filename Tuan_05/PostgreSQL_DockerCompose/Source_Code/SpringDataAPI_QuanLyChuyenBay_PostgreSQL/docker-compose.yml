@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  demo2:
+    container_name: demo2
+    image: 'demo2'
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/QLChuyenBay
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=sapassword
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=sapassword
+      - POSTGRES_DB=QLChuyenBay
+    volumes:
+      - db-data:/var/lib/postgressql/data
+    ports:
+      - "5432:5432"
+
+  pg-admin:
+      image: dpage/pgadmin4
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=nam@email.com
+        - PGADMIN_DEFAULT_PASSWORD=nam
+      ports:
+        - "8889:80"
+
+volumes:
+  db-data:
